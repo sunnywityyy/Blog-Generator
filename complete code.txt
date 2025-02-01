@@ -1,0 +1,49 @@
+from transformers import pipeline
+import streamlit as st
+
+def generate_blog(prompt, max_length=300):
+    """
+    Generates a blog post based on the given prompt.
+
+    Args:
+        prompt (str): The input prompt for the blog.
+        max_length (int): The maximum length of the generated blog post.
+
+    Returns:
+        str: The generated blog post.
+    """
+    try:
+        # Load the text-generation pipeline
+        generator = pipeline("text-generation", model="gpt2")  # Replace "gpt2" with your desired model
+        result = generator(prompt, max_length=max_length, num_return_sequences=1)
+        return result[0]["generated_text"]
+    except Exception as e:
+        return f"An error occurred: {e}"
+
+# Streamlit Web App
+st.title("Blog Generator")
+st.write("Enter a topic and generate a blog post!")
+
+# Input field for the topic
+user_prompt = st.text_input("Enter the topic for your blog post:", "")
+
+# Generate button
+if st.button("Generate Blog"):
+    if user_prompt.strip():
+        st.write("Generating blog... Please wait!")
+        # Generate the blog
+        blog_content = generate_blog(prompt=user_prompt, max_length=500)
+        st.subheader("Generated Blog")
+        st.write(blog_content)
+    else:
+        st.warning("Please enter a topic to generate a blog!")
+
+
+ blog_env\Scripts\activate
+
+pip install transformers streamlit
+
+pip show transformers
+pip show streamlit
+
+streamlit run blog_generator.py
